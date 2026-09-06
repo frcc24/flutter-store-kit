@@ -17,14 +17,15 @@ export async function localAuth(projectId = 'test-project') {
   async function tokenFor(uid: string, overrides: JWTPayload & { audience?: string; issuer?: string } = {}): Promise<string> {
     const { audience, issuer, ...claims } = overrides;
     const now = Math.floor(Date.now() / 1000);
-    return new SignJWT({ user_id: uid, auth_time: now - 5, firebase: { sign_in_provider: 'anonymous' }, ...claims })
+    const jwt = new SignJWT({ user_id: uid, auth_time: now - 5, firebase: { sign_in_provider: 'anonymous' }, ...claims })
       .setProtectedHeader({ alg: 'RS256', kid: 'local-1' })
       .setIssuer(issuer ?? `https://securetoken.google.com/${projectId}`)
       .setAudience(audience ?? projectId)
       .setSubject(uid)
-      .setIssuedAt(now - 5)
-      .setExpirationTime(now + 3600)
-      .sign(privateKey);
+      .setIssuedAt(now - 5);
+    // The setters win over the payload, so an `exp` override must skip the
+    // default expiry or the "expired token" case silently tests a valid one.
+    return (claims.exp === undefined ? jwt.setExpirationTime(now + 3600) : jwt).sign(privateKey);
   }
 
   return { verifier, tokenFor };
