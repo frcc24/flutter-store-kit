@@ -52,5 +52,17 @@
   "reviewTitle": "¿Te gusta Mini Sudoku?",
   "reviewBody": "Una valoración lleva diez segundos y ayuda a que otros encuentren el juego.",
   "reviewLater": "Ahora no",
-  "reviewNow": "Valorar"
+  "reviewNow": "Valorar",
+  "deleteData": "Borrar mis datos",
+  "deleteDataBody": "Esto borra tu progreso, estadísticas y saldo de pistas en este dispositivo y en nuestro servidor, sin vuelta atrás. Las compras siguen en tu cuenta de Google y pueden restaurarse.",
+  "deleteDataConfirm": "Borrar todo",
+  "deleteDataDone": "Tus datos fueron borrados.",
+  "deleteDataUnavailable": "No se pudo contactar con el servidor. No se borró nada; inténtalo más tarde.",
+  "privacyAds": "Los anuncios los sirve Unity Ads. Unity y sus socios pueden procesar el identificador de publicidad del dispositivo, la dirección IP, la ubicación aproximada y las interacciones con anuncios para mostrar, medir y (si aceptaste) personalizar anuncios. Eliges entre anuncios personalizados y no personalizados al abrir la app y en Ajustes.",
+  "privacyPurchases": "Las compras pasan por Google Play. Recibimos un token de compra, nunca tus datos de pago. El token se envía a nuestro servidor para verificar la compra y acreditar tus pistas.",
+  "privacyAccount": "Para acreditar pistas, la app crea una cuenta anónima (un identificador aleatorio, sin nombre ni correo). Borrar mis datos, en Ajustes, elimina esa cuenta y todo lo vinculado a ella en nuestro servidor. También puedes pedir la eliminación por correo, como se describe en la política completa.",
+  "accountId": "Identificador de la cuenta: {id}",
+  "updateRequiredTitle": "Actualización necesaria",
+  "updateRequiredBody": "Esta versión de Mini Sudoku ya no es compatible. Actualízala desde la tienda para seguir jugando.",
+  "updateNow": "Actualizar"
 }

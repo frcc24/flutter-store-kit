@@ -70,6 +70,9 @@ class LocalStore {
   Future<void> saveAdsConsent(bool consent) =>
       _prefs.setBool(_adsConsentKey, consent);
 
+  /// Everything, including the language: "delete my data" means all of it.
+  Future<void> clearAll() => _prefs.clear();
+
   String? loadLocale() => _prefs.getString(_localeKey);
 
   Future<void> saveLocale(String? code) => code == null

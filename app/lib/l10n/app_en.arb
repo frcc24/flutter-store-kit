@@ -74,5 +74,22 @@
   "reviewTitle": "Enjoying Mini Sudoku?",
   "reviewBody": "A rating takes ten seconds and helps other people find the game.",
   "reviewLater": "Not now",
-  "reviewNow": "Rate it"
+  "reviewNow": "Rate it",
+  "deleteData": "Delete my data",
+  "deleteDataBody": "This erases your progress, statistics and hint balance on this device and on our server, and cannot be undone. Purchases stay with your Google account and can be restored.",
+  "deleteDataConfirm": "Delete everything",
+  "deleteDataDone": "Your data was deleted.",
+  "deleteDataUnavailable": "The server could not be reached. Nothing was deleted; try again later.",
+  "privacyAds": "Ads are served by Unity Ads. Unity and its partners may process the device's advertising id, IP address, approximate location and ad interactions to show, measure and (if you agreed) personalize ads. You choose between personalized and non-personalized ads when the app starts and in Settings.",
+  "privacyPurchases": "Purchases go through Google Play. We receive a purchase token, never your payment details. The token is sent to our server to verify the purchase and credit your hints.",
+  "privacyAccount": "To credit hints, the app creates an anonymous account (a random id, no name or e-mail). Delete my data, in Settings, erases that account and everything linked to it on our server. You can also request deletion by e-mail as described in the full policy.",
+  "accountId": "Account id: {id}",
+  "@accountId": {
+    "placeholders": {
+      "id": {"type": "String"}
+    }
+  },
+  "updateRequiredTitle": "Update required",
+  "updateRequiredBody": "This version of Mini Sudoku is no longer supported. Update it from the store to keep playing.",
+  "updateNow": "Update"
 }

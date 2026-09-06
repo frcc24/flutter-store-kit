@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../core/iap/products.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services.dart';
+import '../home/home_screen.dart';
+import 'delete_account.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key, required this.services});
@@ -14,6 +16,46 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  Future<void> _confirmDelete() async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.deleteData),
+        content: Text(l10n.deleteDataBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.deleteDataConfirm),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    final outcome = await deleteEverything(widget.services);
+    if (!mounted) return;
+    final messenger = ScaffoldMessenger.of(context);
+    switch (outcome) {
+      case DeleteOutcome.unavailable:
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.deleteDataUnavailable)),
+        );
+      case DeleteOutcome.done:
+        messenger.showSnackBar(SnackBar(content: Text(l10n.deleteDataDone)));
+        // A fresh home over an empty store, with nothing to go back to.
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute<void>(
+            builder: (_) => HomeScreen(services: widget.services),
+          ),
+          (_) => false,
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -80,6 +122,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Text(l10n.restorePurchases),
               ),
             ],
+            const SizedBox(height: 32),
+            OutlinedButton.icon(
+              icon: const Icon(Icons.delete_outline),
+              label: Text(l10n.deleteData),
+              onPressed: _confirmDelete,
+            ),
           ],
         ),
       ),

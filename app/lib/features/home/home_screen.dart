@@ -142,7 +142,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 12),
                 TextButton(
-                  onPressed: () => _push(const PrivacyPolicyScreen()),
+                  onPressed: () =>
+                      _push(PrivacyPolicyScreen(services: widget.services)),
                   child: Text(l10n.privacyPolicy),
                 ),
               ],
