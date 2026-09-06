@@ -46,6 +46,14 @@ class LocalStore {
   Future<void> saveStats(PlayerStats stats) =>
       _prefs.setString(_statsKey, jsonEncode(stats.toJson()));
 
+  static const _adsConsentKey = 'ads_consent';
+
+  /// Null until the player answered the consent dialog.
+  bool? loadAdsConsent() => _prefs.getBool(_adsConsentKey);
+
+  Future<void> saveAdsConsent(bool consent) =>
+      _prefs.setBool(_adsConsentKey, consent);
+
   String? loadLocale() => _prefs.getString(_localeKey);
 
   Future<void> saveLocale(String? code) => code == null

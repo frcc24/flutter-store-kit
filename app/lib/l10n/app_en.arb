@@ -48,5 +48,10 @@
   "privacyCrash": "If the app crashes, a report with the device model, OS version and the error is sent to Firebase Crashlytics so the bug can be fixed. Firebase Analytics receives anonymous usage events such as a completed game. Neither includes your name or contact details.",
   "privacyChildren": "The app is intended for a general audience and is not directed to children under 13.",
   "privacyContact": "For privacy questions, use the developer contact shown on the store listing.",
-  "openFullPolicy": "Open full policy"
+  "openFullPolicy": "Open full policy",
+  "adsConsentTitle": "Ads in Mini Sudoku",
+  "adsConsentBody": "This game is free and shows ads. Personalized ads use your device's advertising id to pick what you see; non-personalized ads do not. You can change this in Settings, and remove ads with a purchase.",
+  "adsPersonalized": "Personalized ads",
+  "adsNonPersonalized": "Non-personalized",
+  "adsPersonalizedSetting": "Personalized ads"
 }

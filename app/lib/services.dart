@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'core/ads/ads_service.dart';
 import 'core/api/kit_api.dart';
 import 'core/auth/anonymous_session.dart';
 import 'core/crash/crash_reporter.dart';
@@ -16,6 +17,7 @@ class Services {
     required this.settings,
     required this.session,
     required this.api,
+    required this.ads,
   });
 
   /// Production wiring. Each piece answers "unavailable" when its backing
@@ -29,6 +31,7 @@ class Services {
       settings: SettingsController(store),
       session: session,
       api: KitApi.fromEnvironment(session.idToken),
+      ads: AdsService(),
     );
   }
 
@@ -36,6 +39,7 @@ class Services {
   final SettingsController settings;
   final AnonymousSession session;
   final KitApi? api;
+  final AdsService ads;
 
   /// The controller for a new or resumed game, wired to the server when
   /// there is one.

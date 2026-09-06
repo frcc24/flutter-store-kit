@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/ads/ads_consent_dialog.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services.dart';
 import '../privacy/privacy_policy_screen.dart';
@@ -28,6 +29,20 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _saved = widget.services.store.loadSession();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _bootAds());
+  }
+
+  /// Consent first, SDK second. Asked once; the answer lives in the store
+  /// and can be changed in Settings.
+  Future<void> _bootAds() async {
+    final services = widget.services;
+    if (!services.ads.config.isConfigured) return;
+    var consent = services.store.loadAdsConsent();
+    if (consent == null) {
+      consent = await showAdsConsentDialog(context) ?? false;
+      await services.store.saveAdsConsent(consent);
+    }
+    await services.ads.init(consent: consent);
   }
 
   /// Pushes the game and owns the controller's lifetime.
@@ -119,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 12),
                 OutlinedButton(
                   onPressed: () =>
-                      _push(SettingsScreen(settings: widget.services.settings)),
+                      _push(SettingsScreen(services: widget.services)),
                   child: Text(l10n.settings),
                 ),
                 const SizedBox(height: 12),

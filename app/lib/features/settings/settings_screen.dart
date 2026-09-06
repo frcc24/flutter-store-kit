@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
-import 'settings_controller.dart';
+import '../../services.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key, required this.settings});
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({super.key, required this.services});
 
-  final SettingsController settings;
+  final Services services;
 
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final services = widget.services;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settings)),
       body: ListenableBuilder(
-        listenable: settings,
+        listenable: services.settings,
         builder: (context, _) => ListView(
           padding: const EdgeInsets.all(16),
           children: [
             DropdownButtonFormField<String>(
-              initialValue: settings.locale?.languageCode ?? 'system',
+              initialValue: services.settings.locale?.languageCode ?? 'system',
               decoration: InputDecoration(labelText: l10n.language),
               items: [
                 DropdownMenuItem(
@@ -31,8 +37,18 @@ class SettingsScreen extends StatelessWidget {
                 const DropdownMenuItem(value: 'es', child: Text('Español')),
               ],
               onChanged: (code) =>
-                  settings.setLocale(code == 'system' ? null : code),
+                  services.settings.setLocale(code == 'system' ? null : code),
             ),
+            if (services.ads.config.isConfigured)
+              SwitchListTile(
+                title: Text(l10n.adsPersonalizedSetting),
+                value: services.store.loadAdsConsent() ?? false,
+                onChanged: (value) async {
+                  await services.store.saveAdsConsent(value);
+                  await services.ads.setConsent(value);
+                  setState(() {});
+                },
+              ),
           ],
         ),
       ),
