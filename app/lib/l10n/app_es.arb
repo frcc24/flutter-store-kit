@@ -36,5 +36,10 @@
   "adsConsentBody": "Este juego es gratuito y muestra anuncios. Los anuncios personalizados usan el identificador de publicidad del dispositivo para elegir lo que ves; los no personalizados, no. Puedes cambiarlo en Ajustes y quitar los anuncios con una compra.",
   "adsPersonalized": "Anuncios personalizados",
   "adsNonPersonalized": "No personalizados",
-  "adsPersonalizedSetting": "Anuncios personalizados"
+  "adsPersonalizedSetting": "Anuncios personalizados",
+  "hintOfferTitle": "Sin pistas",
+  "watchAdForHint": "Ver un anuncio · +1 pista",
+  "hintsUnavailable": "Las pistas extra no están disponibles ahora.",
+  "rewardPending": "¡Gracias! Tu pista está en camino; inténtalo de nuevo en un momento.",
+  "cancel": "Cancelar"
 }

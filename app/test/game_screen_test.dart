@@ -74,9 +74,13 @@ void main() {
     expect(controller.session!.hintsUsed, 1);
     expect(find.text('No hints left'), findsOneWidget);
 
+    // No server in the test services: the sheet opens and only explains.
     await tester.tap(find.text('Hint'));
     await tester.pumpAndSettle();
-    expect(find.text('No hints left for this game.'), findsOneWidget);
+    expect(find.text('Out of hints'), findsOneWidget);
+    expect(find.textContaining('not available'), findsOneWidget);
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
 
     await controller.pause();
   });

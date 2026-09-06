@@ -4,6 +4,7 @@ import '../../core/analytics/app_analytics.dart';
 import '../../core/time_format.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services.dart';
+import '../hints/hint_offer_sheet.dart';
 import 'board_widget.dart';
 import 'difficulty_label.dart';
 import 'game_controller.dart';
@@ -105,12 +106,27 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _hint() async {
-    final result = await widget.controller.useHint();
-    if (!mounted || result != HintResult.noHintsLeft) return;
-    // ponytail: chapter 7 replaces this snackbar with the "watch an ad" offer.
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppLocalizations.of(context).noHintsLeft)),
-    );
+    final controller = widget.controller;
+    final result = await controller.useHint();
+    if (!mounted) return;
+    switch (result) {
+      case HintResult.applied:
+      case HintResult.nothingToReveal:
+        return;
+      case HintResult.unavailable:
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context).hintsUnavailable),
+          ),
+        );
+      case HintResult.noHintsLeft:
+        final credited = await showHintOffer(
+          context,
+          services: widget.services,
+          controller: controller,
+        );
+        if (credited && mounted) await controller.useHint();
+    }
   }
 
   @override

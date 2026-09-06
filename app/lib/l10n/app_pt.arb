@@ -36,5 +36,10 @@
   "adsConsentBody": "Este jogo é gratuito e mostra anúncios. Anúncios personalizados usam o identificador de publicidade do aparelho para escolher o que você vê; os não personalizados, não. Dá para mudar em Configurações e remover os anúncios com uma compra.",
   "adsPersonalized": "Anúncios personalizados",
   "adsNonPersonalized": "Não personalizados",
-  "adsPersonalizedSetting": "Anúncios personalizados"
+  "adsPersonalizedSetting": "Anúncios personalizados",
+  "hintOfferTitle": "Sem dicas",
+  "watchAdForHint": "Assistir a um anúncio · +1 dica",
+  "hintsUnavailable": "Dicas extras não estão disponíveis agora.",
+  "rewardPending": "Valeu! Sua dica está a caminho — tente de novo em instantes.",
+  "cancel": "Cancelar"
 }

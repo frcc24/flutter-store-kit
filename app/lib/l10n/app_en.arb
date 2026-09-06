@@ -53,5 +53,10 @@
   "adsConsentBody": "This game is free and shows ads. Personalized ads use your device's advertising id to pick what you see; non-personalized ads do not. You can change this in Settings, and remove ads with a purchase.",
   "adsPersonalized": "Personalized ads",
   "adsNonPersonalized": "Non-personalized",
-  "adsPersonalizedSetting": "Personalized ads"
+  "adsPersonalizedSetting": "Personalized ads",
+  "hintOfferTitle": "Out of hints",
+  "watchAdForHint": "Watch an ad · +1 hint",
+  "hintsUnavailable": "Extra hints are not available right now.",
+  "rewardPending": "Thanks! Your hint is on its way — try again in a moment.",
+  "cancel": "Cancel"
 }
