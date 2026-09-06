@@ -58,5 +58,17 @@
   "watchAdForHint": "Watch an ad · +1 hint",
   "hintsUnavailable": "Extra hints are not available right now.",
   "rewardPending": "Thanks! Your hint is on its way — try again in a moment.",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "purchases": "Purchases",
+  "removeAds": "Remove ads",
+  "adsRemoved": "Ads removed. Thank you!",
+  "restorePurchases": "Restore purchases",
+  "restoreDone": "Purchases restored.",
+  "buyHintPack": "Buy 5 hints · {price}",
+  "@buyHintPack": {
+    "placeholders": {
+      "price": {"type": "String"}
+    }
+  },
+  "purchasePending": "Purchase pending…"
 }

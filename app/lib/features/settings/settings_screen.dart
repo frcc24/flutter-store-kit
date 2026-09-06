@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/iap/products.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services.dart';
 
@@ -20,7 +21,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settings)),
       body: ListenableBuilder(
-        listenable: services.settings,
+        // The shop notifies when a delivery marks the purchase as owned.
+        listenable: Listenable.merge([services.settings, services.iap]),
         builder: (context, _) => ListView(
           padding: const EdgeInsets.all(16),
           children: [
@@ -49,6 +51,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   setState(() {});
                 },
               ),
+            if (services.iap.available) ...[
+              const SizedBox(height: 24),
+              Text(
+                l10n.purchases,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              if (services.store.loadStats().adFree)
+                ListTile(
+                  leading: const Icon(Icons.check),
+                  title: Text(l10n.adsRemoved),
+                )
+              else if (services.iap.products[removeAdsId] case final product?)
+                ListTile(
+                  leading: const Icon(Icons.block),
+                  title: Text('${l10n.removeAds} · ${product.price}'),
+                  onTap: () => services.iap.buyNonConsumable(removeAdsId),
+                ),
+              TextButton(
+                onPressed: () async {
+                  await services.iap.restore();
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(l10n.restoreDone)));
+                  }
+                },
+                child: Text(l10n.restorePurchases),
+              ),
+            ],
           ],
         ),
       ),

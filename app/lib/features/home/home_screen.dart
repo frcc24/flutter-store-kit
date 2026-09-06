@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/ads/ads_consent_dialog.dart';
+import '../../core/iap/products.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services.dart';
 import '../privacy/privacy_policy_screen.dart';
@@ -29,14 +30,16 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _saved = widget.services.store.loadSession();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _bootAds());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _bootServices());
   }
 
-  /// Consent first, SDK second. Asked once; the answer lives in the store
-  /// and can be changed in Settings.
-  Future<void> _bootAds() async {
+  /// The shop first (it only queries), then ads: consent dialog, SDK second.
+  /// Consent is asked once; the answer lives in the store and can be changed
+  /// in Settings.
+  Future<void> _bootServices() async {
     final services = widget.services;
-    if (!services.ads.config.isConfigured) return;
+    await services.iap.init(kitProductIds);
+    if (!mounted || !services.ads.config.isConfigured) return;
     var consent = services.store.loadAdsConsent();
     if (consent == null) {
       consent = await showAdsConsentDialog(context) ?? false;

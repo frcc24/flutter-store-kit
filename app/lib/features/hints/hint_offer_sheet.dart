@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../core/ads/ads_service.dart';
+import '../../core/iap/products.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services.dart';
 import '../sudoku/game_controller.dart';
 
-enum _Offer { ad }
+enum _Offer { ad, pack }
 
 /// Shown when the game has no hint left. Returns true when the wallet now
 /// has a hint (the caller then calls useHint again). The reward is credited
@@ -19,6 +20,7 @@ Future<bool> showHintOffer(
   final l10n = AppLocalizations.of(context);
   final api = services.api;
   final canWatch = api != null && services.ads.isRewardedReady;
+  final pack = api == null ? null : services.iap.products[hintPack5Id];
   final choice = await showModalBottomSheet<_Offer>(
     context: context,
     builder: (context) => SafeArea(
@@ -36,8 +38,14 @@ Future<bool> showHintOffer(
               leading: const Icon(Icons.play_circle_outline),
               title: Text(l10n.watchAdForHint),
               onTap: () => Navigator.pop(context, _Offer.ad),
-            )
-          else
+            ),
+          if (pack != null)
+            ListTile(
+              leading: const Icon(Icons.shopping_bag_outlined),
+              title: Text(l10n.buyHintPack(pack.price)),
+              onTap: () => Navigator.pop(context, _Offer.pack),
+            ),
+          if (!canWatch && pack == null)
             ListTile(
               leading: const Icon(Icons.info_outline),
               title: Text(l10n.hintsUnavailable),
@@ -51,7 +59,15 @@ Future<bool> showHintOffer(
     ),
   );
   if (choice == null || !context.mounted) return false;
-  return _watchAd(context, services, controller);
+  switch (choice) {
+    case _Offer.ad:
+      return _watchAd(context, services, controller);
+    case _Offer.pack:
+      // Delivery arrives through the purchase stream; the screen reloads
+      // stats when it does.
+      await services.iap.buyConsumable(hintPack5Id);
+      return false;
+  }
 }
 
 Future<bool> _watchAd(

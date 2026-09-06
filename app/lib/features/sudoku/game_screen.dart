@@ -31,6 +31,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     widget.controller.addListener(_onChanged);
+    widget.services.iap.addListener(_onPurchase);
     widget.controller.startTicker();
   }
 
@@ -38,9 +39,13 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     widget.controller.removeListener(_onChanged);
+    widget.services.iap.removeListener(_onPurchase);
     widget.controller.pause();
     super.dispose();
   }
+
+  /// A delivery wrote the wallet to the store; the controller re-reads it.
+  void _onPurchase() => widget.controller.reloadStats();
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

@@ -41,5 +41,12 @@
   "watchAdForHint": "Ver un anuncio · +1 pista",
   "hintsUnavailable": "Las pistas extra no están disponibles ahora.",
   "rewardPending": "¡Gracias! Tu pista está en camino; inténtalo de nuevo en un momento.",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+  "purchases": "Compras",
+  "removeAds": "Quitar anuncios",
+  "adsRemoved": "Anuncios eliminados. ¡Gracias!",
+  "restorePurchases": "Restaurar compras",
+  "restoreDone": "Compras restauradas.",
+  "buyHintPack": "Comprar 5 pistas · {price}",
+  "purchasePending": "Compra pendiente…"
 }

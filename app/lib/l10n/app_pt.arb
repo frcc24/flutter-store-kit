@@ -41,5 +41,12 @@
   "watchAdForHint": "Assistir a um anúncio · +1 dica",
   "hintsUnavailable": "Dicas extras não estão disponíveis agora.",
   "rewardPending": "Valeu! Sua dica está a caminho — tente de novo em instantes.",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+  "purchases": "Compras",
+  "removeAds": "Remover anúncios",
+  "adsRemoved": "Anúncios removidos. Obrigado!",
+  "restorePurchases": "Restaurar compras",
+  "restoreDone": "Compras restauradas.",
+  "buyHintPack": "Comprar 5 dicas · {price}",
+  "purchasePending": "Compra pendente…"
 }
