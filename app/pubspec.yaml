@@ -23,6 +23,7 @@ dependencies:
   app_tracking_transparency: ^2.0.7
   in_app_purchase: ^3.3.0
   in_app_purchase_android: ^0.5.3
+  in_app_review: ^2.0.12
 
 dev_dependencies:
   flutter_test:

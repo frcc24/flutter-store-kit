@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../features/review/review_prompt.dart';
 import '../../features/stats/player_stats.dart';
 import '../../features/sudoku/game_session.dart';
 
@@ -45,6 +46,21 @@ class LocalStore {
 
   Future<void> saveStats(PlayerStats stats) =>
       _prefs.setString(_statsKey, jsonEncode(stats.toJson()));
+
+  static const _reviewKey = 'review_state';
+
+  ReviewState loadReviewState() {
+    final raw = _prefs.getString(_reviewKey);
+    if (raw == null || raw.isEmpty) return const ReviewState();
+    try {
+      return ReviewState.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+    } catch (_) {
+      return const ReviewState();
+    }
+  }
+
+  Future<void> saveReviewState(ReviewState state) =>
+      _prefs.setString(_reviewKey, jsonEncode(state.toJson()));
 
   static const _adsConsentKey = 'ads_consent';
 

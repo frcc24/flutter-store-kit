@@ -6,6 +6,7 @@ import 'core/auth/anonymous_session.dart';
 import 'core/crash/crash_reporter.dart';
 import 'core/iap/iap_service.dart';
 import 'core/storage/local_store.dart';
+import 'features/review/review_prompt.dart';
 import 'features/settings/settings_controller.dart';
 import 'features/shop/purchase_deliveries.dart';
 import 'features/sudoku/game_controller.dart';
@@ -21,6 +22,7 @@ class Services {
     required this.api,
     required this.ads,
     required this.iap,
+    required this.review,
   });
 
   /// Production wiring. Each piece answers "unavailable" when its backing
@@ -44,6 +46,7 @@ class Services {
       api: api,
       ads: AdsService(),
       iap: iap,
+      review: ReviewPrompt(store),
     );
   }
 
@@ -53,6 +56,7 @@ class Services {
   final KitApi? api;
   final AdsService ads;
   final IapService iap;
+  final ReviewPrompt review;
 
   /// The controller for a new or resumed game, wired to the server when
   /// there is one.

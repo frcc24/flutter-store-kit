@@ -1,11 +1,13 @@
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_platform_interface/in_app_purchase_platform_interface.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:mini_sudoku/core/ads/ads_config.dart';
 import 'package:mini_sudoku/core/ads/ads_service.dart';
 import 'package:mini_sudoku/core/api/kit_api.dart';
 import 'package:mini_sudoku/core/auth/anonymous_session.dart';
 import 'package:mini_sudoku/core/iap/iap_service.dart';
 import 'package:mini_sudoku/core/storage/local_store.dart';
+import 'package:mini_sudoku/features/review/review_prompt.dart';
 import 'package:mini_sudoku/features/settings/settings_controller.dart';
 import 'package:mini_sudoku/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,6 +63,7 @@ Future<Services> testServices({
   AnonymousSession? session,
   AdsService? ads,
   IapService? iap,
+  ReviewPrompt? review,
 }) async {
   final s = store ?? await freshStore();
   return Services(
@@ -70,5 +73,21 @@ Future<Services> testServices({
     api: api,
     ads: ads ?? AdsService(config: const AdsConfig()),
     iap: iap ?? IapService(store: NoStore(), onPurchase: (_) async {}),
+    review: review ?? ReviewPrompt(s, review: NoReview()),
   );
+}
+
+/// The platform sheet that is not there in a test.
+class NoReview implements InAppReview {
+  @override
+  Future<bool> isAvailable() async => false;
+
+  @override
+  Future<void> requestReview() async {}
+
+  @override
+  Future<void> openStoreListing({
+    String? appStoreId,
+    String? microsoftStoreId,
+  }) async {}
 }

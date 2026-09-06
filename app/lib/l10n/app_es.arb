@@ -48,5 +48,9 @@
   "restorePurchases": "Restaurar compras",
   "restoreDone": "Compras restauradas.",
   "buyHintPack": "Comprar 5 pistas · {price}",
-  "purchasePending": "Compra pendiente…"
+  "purchasePending": "Compra pendiente…",
+  "reviewTitle": "¿Te gusta Mini Sudoku?",
+  "reviewBody": "Una valoración lleva diez segundos y ayuda a que otros encuentren el juego.",
+  "reviewLater": "Ahora no",
+  "reviewNow": "Valorar"
 }

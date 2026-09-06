@@ -5,6 +5,7 @@ import '../../core/time_format.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services.dart';
 import '../hints/hint_offer_sheet.dart';
+import '../review/review_dialog.dart';
 import 'board_widget.dart';
 import 'difficulty_label.dart';
 import 'game_controller.dart';
@@ -74,9 +75,10 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _showCompleted() async {
-    final session = widget.controller.session!;
+    final controller = widget.controller;
+    final session = controller.session!;
     final l10n = AppLocalizations.of(context);
-    await showDialog<void>(
+    final playAgain = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) => AlertDialog(
@@ -90,24 +92,40 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         ),
         actions: [
           TextButton(
-            onPressed: () {
-              Navigator.pop(dialogContext);
-              Navigator.of(context).maybePop();
-            },
+            onPressed: () => Navigator.pop(dialogContext, false),
             child: Text(l10n.backHome),
           ),
           FilledButton(
-            onPressed: () {
-              Navigator.pop(dialogContext);
-              _completionShown = false;
-              widget.controller.startNew(session.difficulty);
-              widget.controller.startTicker();
-            },
+            onPressed: () => Navigator.pop(dialogContext, true),
             child: Text(l10n.playAgain),
           ),
         ],
       ),
     );
+    if (!mounted) return;
+    await _afterGame();
+    if (!mounted) return;
+    if (playAgain == true) {
+      _completionShown = false;
+      controller.startNew(session.difficulty);
+      controller.startTicker();
+    } else {
+      Navigator.of(context).maybePop();
+    }
+  }
+
+  /// Review first, ad second, never both on the same game. The review asks
+  /// for a favour; an ad right before it is the wrong mood.
+  Future<void> _afterGame() async {
+    final services = widget.services;
+    final stats = widget.controller.stats;
+    if (await services.review.shouldPrompt(stats.completedGames)) {
+      if (mounted) await showReviewDialog(context, services.review);
+      return;
+    }
+    if (!stats.adFree && stats.completedGames % 2 == 0) {
+      await services.ads.showInterstitial();
+    }
   }
 
   Future<void> _hint() async {
