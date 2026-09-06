@@ -1,0 +1,21 @@
+# Mini Sudoku hint wallet. Free plan only: Workers + D1.
+name = "mini-sudoku-api"
+main = "src/index.ts"
+compatibility_date = "2026-07-01"
+workers_dev = true
+
+[vars]
+# Doubles as the expected `aud` and the `iss` suffix of every Firebase ID token.
+FIREBASE_PROJECT_ID = "replace-me"
+ANDROID_PACKAGE_NAME = "br.com.frcc24.mini_sudoku"
+
+# Secrets are never here. Set with `wrangler secret put <NAME>`:
+#   GOOGLE_PLAY_SERVICE_ACCOUNT  whole JSON key, one line (chapter 8)
+#   UNITY_ADS_S2S_SECRET         issued by Unity support per Game ID (chapter 8)
+
+[[d1_databases]]
+binding = "DB"
+database_name = "mini-sudoku"
+# Filled in by `wrangler d1 create mini-sudoku` (README). Any value works locally.
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"

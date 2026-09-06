@@ -1,0 +1,4 @@
+# Copy to .dev.vars for `wrangler dev`. NEVER commit .dev.vars.
+# Names only; real values are set per environment with `wrangler secret put`.
+GOOGLE_PLAY_SERVICE_ACCOUNT={"client_email":"...","private_key":"-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"}
+UNITY_ADS_S2S_SECRET=replace-with-the-secret-unity-issues
