@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/analytics/app_analytics.dart';
 import '../../core/time_format.dart';
 import '../../l10n/app_localizations.dart';
 import 'board_widget.dart';
@@ -51,6 +52,12 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     final session = widget.controller.session;
     if (session == null || !session.isCompleted || _completionShown) return;
     _completionShown = true;
+    AppAnalytics.logGameCompleted(
+      difficulty: session.difficulty.name,
+      elapsedMs: session.elapsedMs,
+      mistakes: session.mistakes,
+      hintsUsed: session.hintsUsed,
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) => _showCompleted());
   }
 

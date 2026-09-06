@@ -4,6 +4,13 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// The Firebase Gradle plugins need google-services.json. Apply them only when
+// the project has been configured, so a fresh clone and CI still build.
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+    apply(plugin = "com.google.firebase.crashlytics")
+}
+
 android {
     namespace = "br.com.frcc24.mini_sudoku"
     compileSdk = flutter.compileSdkVersion
