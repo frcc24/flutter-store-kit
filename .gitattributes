@@ -1,0 +1,4 @@
+# Keep LF in the repository on every OS; Windows checkouts stop warning about CRLF.
+* text=auto eol=lf
+*.png binary
+*.jks binary
