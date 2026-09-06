@@ -1,25 +1,34 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 
+import '../../core/api/kit_api.dart';
 import '../../core/storage/local_store.dart';
 import '../stats/player_stats.dart';
 import 'engine.dart';
 import 'game_session.dart';
 
-enum HintResult { applied, noHintsLeft, nothingToReveal }
+enum HintResult { applied, noHintsLeft, nothingToReveal, unavailable }
+
+/// Spends one paid hint on the server; null when the app has no server.
+typedef RemoteHintSpender = Future<SpendResult> Function(String operationId);
 
 /// Drives one game. Owns the session, the selection, the conflicts shown on
 /// the board and the one-second ticker. The screen starts and pauses the
 /// ticker; the controller never starts it on its own so tests stay timer-free.
 class GameController extends ChangeNotifier {
-  GameController({required LocalStore store, SudokuEngine? engine})
-    : _store = store,
-      _engine = engine ?? SudokuEngine(),
-      _stats = store.loadStats();
+  GameController({
+    required LocalStore store,
+    SudokuEngine? engine,
+    this._remoteSpend,
+  }) : _store = store,
+       _engine = engine ?? SudokuEngine(),
+       _stats = store.loadStats();
 
   final LocalStore _store;
   final SudokuEngine _engine;
+  final RemoteHintSpender? _remoteSpend;
 
   GameSession? _session;
   (int, int)? _selected;
@@ -86,7 +95,8 @@ class GameController extends ChangeNotifier {
   Future<void> erase() => input(0);
 
   /// Reveals the selected cell, or the first wrong one. The first hint of a
-  /// game is free; the rest come out of [PlayerStats.hintBalance].
+  /// game is free; the rest are paid — on the server when there is one,
+  /// from the local mirror when there is not.
   Future<HintResult> useHint() async {
     final session = _session;
     if (session == null || session.isCompleted) {
@@ -95,15 +105,14 @@ class GameController extends ChangeNotifier {
     final target = _hintTarget(session);
     if (target == null) return HintResult.nothingToReveal;
     final free = !session.freeHintUsed;
-    if (!free && _stats.hintBalance <= 0) return HintResult.noHintsLeft;
+    if (!free) {
+      final refused = await _spendPaidHint();
+      if (refused != null) return refused;
+    }
 
     final (row, col) = target;
     final grid = session.grid.map((r) => [...r]).toList();
     grid[row][col] = session.solution[row][col];
-    if (!free) {
-      _stats = _stats.copyWith(hintBalance: _stats.hintBalance - 1);
-      await _store.saveStats(_stats);
-    }
     _selected = (row, col);
     _conflicts = const {};
     await _commit(
@@ -114,6 +123,19 @@ class GameController extends ChangeNotifier {
       ),
     );
     return HintResult.applied;
+  }
+
+  /// The wallet as the server last reported it (after an ad or a purchase).
+  void setHintBalance(int hints) {
+    _stats = _stats.copyWith(hintBalance: hints);
+    _store.saveStats(_stats);
+    notifyListeners();
+  }
+
+  /// Re-reads stats another writer (a purchase delivery) saved.
+  void reloadStats() {
+    _stats = _store.loadStats();
+    notifyListeners();
   }
 
   void startTicker() {
@@ -137,6 +159,35 @@ class GameController extends ChangeNotifier {
       await _store.saveSession(session);
     }
   }
+
+  /// Null when a hint was paid for; otherwise the reason it was not.
+  Future<HintResult?> _spendPaidHint() async {
+    final remote = _remoteSpend;
+    if (remote == null) {
+      // No server: the local mirror is the only balance there is.
+      if (_stats.hintBalance <= 0) return HintResult.noHintsLeft;
+      _stats = _stats.copyWith(hintBalance: _stats.hintBalance - 1);
+      await _store.saveStats(_stats);
+      return null;
+    }
+    switch (await remote(_operationId())) {
+      case SpendBalance(:final hints):
+        _stats = _stats.copyWith(hintBalance: hints);
+        await _store.saveStats(_stats);
+        return null;
+      case SpendNoHints():
+        _stats = _stats.copyWith(hintBalance: 0);
+        await _store.saveStats(_stats);
+        return HintResult.noHintsLeft;
+      case SpendUnavailable():
+        return HintResult.unavailable;
+    }
+  }
+
+  /// Unique per attempt so a retry after a lost response answers the same
+  /// balance instead of spending twice.
+  String _operationId() =>
+      '${DateTime.now().millisecondsSinceEpoch}-${Random.secure().nextInt(1 << 32)}';
 
   (int, int)? _hintTarget(GameSession session) {
     bool wrong(int r, int c) =>

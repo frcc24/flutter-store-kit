@@ -1,5 +1,6 @@
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mini_sudoku/core/api/kit_api.dart';
 import 'package:mini_sudoku/core/storage/local_store.dart';
 import 'package:mini_sudoku/features/stats/player_stats.dart';
 import 'package:mini_sudoku/features/sudoku/engine.dart';
@@ -136,5 +137,46 @@ void main() {
       async.elapse(const Duration(seconds: 3));
       expect(controller.session!.elapsedMs, 3000);
     });
+  });
+
+  test('a paid hint goes through the server when one is configured', () async {
+    SharedPreferences.setMockInitialValues({});
+    final store = LocalStore(await SharedPreferences.getInstance());
+    final spent = <String>[];
+    final controller = GameController(
+      store: store,
+      remoteSpend: (operationId) async {
+        spent.add(operationId);
+        return const SpendBalance(4);
+      },
+    );
+    addTearDown(controller.dispose);
+    controller.startNew(Difficulty.easy, seed: 5);
+    expect(await controller.useHint(), HintResult.applied); // free, no call
+    expect(spent, isEmpty);
+    expect(await controller.useHint(), HintResult.applied); // paid
+    expect(spent, hasLength(1));
+    expect(controller.hintBalance, 4);
+    expect(store.loadStats().hintBalance, 4);
+  });
+
+  test('server answers decide noHintsLeft and unavailable', () async {
+    SharedPreferences.setMockInitialValues({});
+    final store = LocalStore(await SharedPreferences.getInstance());
+    SpendResult next = const SpendNoHints();
+    final controller = GameController(
+      store: store,
+      remoteSpend: (_) async => next,
+    );
+    addTearDown(controller.dispose);
+    controller.startNew(Difficulty.easy, seed: 5);
+    await controller.useHint(); // free
+    final before = controller.session!.grid.map((r) => [...r]).toList();
+    expect(await controller.useHint(), HintResult.noHintsLeft);
+    next = const SpendUnavailable();
+    expect(await controller.useHint(), HintResult.unavailable);
+    expect(controller.session!.grid, before);
+    controller.setHintBalance(2);
+    expect(store.loadStats().hintBalance, 2);
   });
 }

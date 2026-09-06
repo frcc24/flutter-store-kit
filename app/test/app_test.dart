@@ -1,24 +1,18 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mini_sudoku/app.dart';
-import 'package:mini_sudoku/core/storage/local_store.dart';
-import 'package:mini_sudoku/features/settings/settings_controller.dart';
 import 'package:mini_sudoku/features/sudoku/board_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'support/test_services.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-
-  Future<LocalStore> freshStore() async {
-    SharedPreferences.setMockInitialValues({});
-    return LocalStore(await SharedPreferences.getInstance());
-  }
 
   testWidgets('home starts a new game and then offers to continue it', (
     tester,
   ) async {
     final store = await freshStore();
     await tester.pumpWidget(
-      MiniSudokuApp(store: store, settings: SettingsController(store)),
+      MiniSudokuApp(services: await testServices(store: store)),
     );
     await tester.pumpAndSettle();
     expect(find.text('Mini Sudoku'), findsOneWidget);
@@ -37,10 +31,7 @@ void main() {
   });
 
   testWidgets('statistics, rules and settings screens open', (tester) async {
-    final store = await freshStore();
-    await tester.pumpWidget(
-      MiniSudokuApp(store: store, settings: SettingsController(store)),
-    );
+    await tester.pumpWidget(MiniSudokuApp(services: await testServices()));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Statistics'));
@@ -61,11 +52,10 @@ void main() {
   });
 
   testWidgets('switching language re-labels the home screen', (tester) async {
-    final store = await freshStore();
-    final settings = SettingsController(store);
-    await tester.pumpWidget(MiniSudokuApp(store: store, settings: settings));
+    final services = await testServices();
+    await tester.pumpWidget(MiniSudokuApp(services: services));
     await tester.pumpAndSettle();
-    await settings.setLocale('pt');
+    await services.settings.setLocale('pt');
     await tester.pumpAndSettle();
     expect(find.text('Nova partida'), findsOneWidget);
   });

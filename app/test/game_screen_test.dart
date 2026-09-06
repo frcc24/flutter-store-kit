@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mini_sudoku/core/storage/local_store.dart';
 import 'package:mini_sudoku/features/sudoku/board_widget.dart';
 import 'package:mini_sudoku/features/sudoku/engine.dart';
 import 'package:mini_sudoku/features/sudoku/game_controller.dart';
 import 'package:mini_sudoku/features/sudoku/game_screen.dart';
 import 'package:mini_sudoku/l10n/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'support/test_services.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +20,8 @@ void main() {
   testWidgets('solving the last cell shows the completion dialog', (
     tester,
   ) async {
-    SharedPreferences.setMockInitialValues({});
-    final store = LocalStore(await SharedPreferences.getInstance());
+    final store = await freshStore();
+    final services = await testServices(store: store);
     final controller = GameController(store: store)
       ..startNew(Difficulty.easy, seed: 7);
     addTearDown(controller.dispose);
@@ -37,7 +37,9 @@ void main() {
     }
     final (lr, lc) = empties.last;
 
-    await tester.pumpWidget(wrap(GameScreen(controller: controller)));
+    await tester.pumpWidget(
+      wrap(GameScreen(controller: controller, services: services)),
+    );
     await tester.pumpAndSettle();
     expect(find.byType(BoardWidget), findsOneWidget);
     expect(find.text('Easy'), findsOneWidget);
@@ -55,13 +57,15 @@ void main() {
   testWidgets('hint reveals a cell and the second hint is refused', (
     tester,
   ) async {
-    SharedPreferences.setMockInitialValues({});
-    final store = LocalStore(await SharedPreferences.getInstance());
+    final store = await freshStore();
+    final services = await testServices(store: store);
     final controller = GameController(store: store)
       ..startNew(Difficulty.easy, seed: 7);
     addTearDown(controller.dispose);
 
-    await tester.pumpWidget(wrap(GameScreen(controller: controller)));
+    await tester.pumpWidget(
+      wrap(GameScreen(controller: controller, services: services)),
+    );
     await tester.pumpAndSettle();
     expect(find.text('1 free hint'), findsOneWidget);
 

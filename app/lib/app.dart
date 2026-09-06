@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
 
-import 'core/storage/local_store.dart';
 import 'core/theme.dart';
 import 'features/home/home_screen.dart';
-import 'features/settings/settings_controller.dart';
 import 'l10n/app_localizations.dart';
+import 'services.dart';
 
 class MiniSudokuApp extends StatelessWidget {
-  const MiniSudokuApp({super.key, required this.store, required this.settings});
+  const MiniSudokuApp({super.key, required this.services});
 
-  final LocalStore store;
-  final SettingsController settings;
+  final Services services;
 
   @override
   Widget build(BuildContext context) => ListenableBuilder(
-    listenable: settings,
+    listenable: services.settings,
     builder: (context, _) => MaterialApp(
       debugShowCheckedModeBanner: false,
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       theme: buildTheme(),
-      locale: settings.locale,
+      locale: services.settings.locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: HomeScreen(store: store, settings: settings),
+      home: HomeScreen(services: services),
     ),
   );
 }

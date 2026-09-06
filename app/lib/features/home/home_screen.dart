@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../core/storage/local_store.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services.dart';
 import '../privacy/privacy_policy_screen.dart';
 import '../rules/rules_screen.dart';
-import '../settings/settings_controller.dart';
 import '../settings/settings_screen.dart';
 import '../stats/stats_screen.dart';
 import '../sudoku/difficulty_label.dart';
@@ -14,10 +13,9 @@ import '../sudoku/game_screen.dart';
 import '../sudoku/game_session.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key, required this.store, required this.settings});
+  const HomeScreen({super.key, required this.services});
 
-  final LocalStore store;
-  final SettingsController settings;
+  final Services services;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -29,23 +27,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _saved = widget.store.loadSession();
+    _saved = widget.services.store.loadSession();
   }
 
   /// Pushes the game and owns the controller's lifetime.
   Future<void> _open(GameController controller) async {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => GameScreen(controller: controller),
+        builder: (_) =>
+            GameScreen(controller: controller, services: widget.services),
       ),
     );
     controller.dispose();
     if (!mounted) return;
-    setState(() => _saved = widget.store.loadSession());
+    setState(() => _saved = widget.services.store.loadSession());
   }
 
   Future<void> _continue() async {
-    final controller = GameController(store: widget.store);
+    final controller = widget.services.newGameController();
     if (!controller.resume()) {
       controller.dispose();
       setState(() => _saved = null);
@@ -70,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     if (difficulty == null || !mounted) return;
-    await _open(GameController(store: widget.store)..startNew(difficulty));
+    await _open(widget.services.newGameController()..startNew(difficulty));
   }
 
   void _push(Widget screen) {
@@ -108,7 +107,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 24),
                 OutlinedButton(
-                  onPressed: () => _push(StatsScreen(store: widget.store)),
+                  onPressed: () =>
+                      _push(StatsScreen(store: widget.services.store)),
                   child: Text(l10n.stats),
                 ),
                 const SizedBox(height: 12),
@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 12),
                 OutlinedButton(
                   onPressed: () =>
-                      _push(SettingsScreen(settings: widget.settings)),
+                      _push(SettingsScreen(settings: widget.services.settings)),
                   child: Text(l10n.settings),
                 ),
                 const SizedBox(height: 12),

@@ -3,14 +3,20 @@ import 'package:flutter/material.dart';
 import '../../core/analytics/app_analytics.dart';
 import '../../core/time_format.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services.dart';
 import 'board_widget.dart';
 import 'difficulty_label.dart';
 import 'game_controller.dart';
 
 class GameScreen extends StatefulWidget {
-  const GameScreen({super.key, required this.controller});
+  const GameScreen({
+    super.key,
+    required this.controller,
+    required this.services,
+  });
 
   final GameController controller;
+  final Services services;
 
   @override
   State<GameScreen> createState() => _GameScreenState();
