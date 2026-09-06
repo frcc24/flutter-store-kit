@@ -1,0 +1,52 @@
+{
+  "@@locale": "en",
+  "appTitle": "Mini Sudoku",
+  "continueGame": "Continue",
+  "newGame": "New game",
+  "chooseDifficulty": "Choose difficulty",
+  "easy": "Easy",
+  "medium": "Medium",
+  "hard": "Hard",
+  "stats": "Statistics",
+  "rules": "Rules",
+  "settings": "Settings",
+  "privacyPolicy": "Privacy policy",
+  "erase": "Erase",
+  "hint": "Hint",
+  "freeHint": "1 free hint",
+  "hintsLeft": "{count, plural, =0{No hints left} =1{1 hint left} other{{count} hints left}}",
+  "@hintsLeft": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "noHintsLeft": "No hints left for this game.",
+  "mistakesCount": "Mistakes: {count}",
+  "@mistakesCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "completedTitle": "Puzzle solved!",
+  "completedBody": "Time {time}, {mistakes} mistakes, {hints} hints.",
+  "@completedBody": {
+    "placeholders": {
+      "time": {"type": "String"},
+      "mistakes": {"type": "int"},
+      "hints": {"type": "int"}
+    }
+  },
+  "playAgain": "Play again",
+  "backHome": "Home",
+  "completedGames": "Completed games",
+  "bestTime": "Best time",
+  "noBestTime": "—",
+  "language": "Language",
+  "systemLanguage": "System language",
+  "rulesBody": "Fill the 9×9 grid so that every row, every column and every 3×3 box contains the digits 1 to 9 exactly once. Tap a cell, then tap a number. A number that clashes with the row, column or box counts as a mistake. You get one free hint per game.",
+  "privacyIntro": "Mini Sudoku stores your progress, statistics and language preference only on your device. There is no account and no server that receives your gameplay data.",
+  "privacyCrash": "If the app crashes, a report with the device model, OS version and the error is sent to Firebase Crashlytics so the bug can be fixed. Firebase Analytics receives anonymous usage events such as a completed game. Neither includes your name or contact details.",
+  "privacyChildren": "The app is intended for a general audience and is not directed to children under 13.",
+  "privacyContact": "For privacy questions, use the developer contact shown on the store listing.",
+  "openFullPolicy": "Open full policy"
+}
