@@ -6,6 +6,26 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-06
+
+### Added
+
+- `server/`: Cloudflare Worker + D1 hint wallet — Firebase ID token auth,
+  atomic idempotent ledger, Google Play receipt verification with
+  acknowledgement, Unity S2S reward callback (HMAC-MD5), account deletion.
+- Unity Ads: rewarded ad that pays one hint through the server, interstitial
+  every second completed game, GDPR/CCPA consent dialog, iOS ATT.
+- Purchases: `remove_ads` (restored by the store) and `hint_pack_5` (credited
+  only after the Worker verified the receipt).
+- Review prompt after the third completed game, then every fifth.
+- Delete my data (server → Firebase user → device) and a bilingual deletion
+  page next to the privacy policy.
+- Remote flags: force update gate, ads and purchase kill switches.
+
+### Changed
+
+- `version` bumped to `0.2.0+2` in `app/pubspec.yaml`.
+
 ## [0.1.0] - 2026-09-06
 
 ### Added

@@ -6,14 +6,24 @@ listing needs, so you can replace the game and keep the rest:
 - local persistence (`LocalStore`), statistics, resume of the saved game
 - localization: English (template), Portuguese, Spanish via `gen-l10n`
 - Crashlytics + Analytics that never block the boot
+- Unity Ads: rewarded ad → hint, interstitial every second game, consent
+  dialog, iOS ATT; empty game ids = no ads
+- purchases: remove ads (store-restored) and a hint pack the server verifies
+- `server/`: a Cloudflare Worker + D1 wallet (free plan) — receipt
+  verification, Unity S2S callback, idempotent ledger, account deletion
+- review prompt, delete-my-data flow, bilingual deletion page
+- remote flags: force update, ads/purchases kill switches
 - privacy policy screen and a hosted policy (`docs/privacy-policy.md`)
 - release signing that fails loudly without your keystore (`docs/release.md`)
 - CI on GitHub Actions: format, analyze, test, Android debug build, iOS
-  no-codesign build
+  no-codesign build, Worker typecheck and tests
 - a device test checklist (`docs/device-test-checklist.md`)
 
-Coming in the next tags: Unity rewarded ads, in-app purchases verified by a
-Cloudflare Worker, review prompt, remote config, Claude Code skills.
+Every online piece degrades to "unavailable" when it is not configured, so a
+fresh clone builds, runs and passes its tests with no Firebase project, no
+Worker and no Unity account.
+
+Coming in the next tags: Claude Code skills and the publishing checklist.
 
 Tested with **Flutter 3.44.2 / Dart 3.12.2**. MIT license.
 
@@ -33,9 +43,16 @@ flutter run
 3. Edit the strings in `app/lib/l10n/*.arb`; `app_en.arb` is the template.
 4. Run `flutterfire configure` to replace `app/lib/firebase_options.dart`.
    `google-services.json` stays out of git (see `.gitignore`).
-5. Regenerate the icon: put your 1024×1024 PNG at `app/assets/icon/icon.png`
+5. Ads: put your Unity Game IDs in `app/lib/core/ads/ads_config.dart`.
+6. Server: follow `server/README.md`, then build the app with
+   `--dart-define=KIT_API_URL=https://<your worker>.workers.dev`. Create the
+   products `remove_ads` and `hint_pack_5` in the Play Console.
+7. Remote Config (optional): create `min_supported_build` (number),
+   `ads_enabled` and `iap_enabled` (booleans) in the Firebase console; the
+   app runs with "all on, nothing forced" until then.
+8. Regenerate the icon: put your 1024×1024 PNG at `app/assets/icon/icon.png`
    and run `dart run flutter_launcher_icons` inside `app/`.
-6. Follow `docs/release.md` to sign and upload.
+9. Follow `docs/release.md` to sign and upload.
 
 ## Tags
 

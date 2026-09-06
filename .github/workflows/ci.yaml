@@ -58,3 +58,28 @@ jobs:
 
       - name: Build iOS (no codesign)
         run: flutter build ios --release --no-codesign
+
+  server:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      # `allowScripts` in package.json approves the workerd/esbuild
+      # postinstall scripts that download the runtime binary.
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run check
+
+      # Runs inside workerd with a local D1; no Cloudflare account involved.
+      - name: Test
+        run: npm test

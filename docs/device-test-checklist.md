@@ -21,3 +21,12 @@ minutes; each line is a real regression that shipped once.
     dialog titles; restart the app and the choice persists.
 11. Privacy policy → "Open full policy" opens the browser.
 12. Rotate the phone on the game screen: nothing is cut off.
+13. First start: the ads consent dialog appears once; choosing either option
+    lets the game start; Settings shows the switch.
+14. Out of hints: the sheet offers "Watch an ad" (test ad in debug); after the
+    video the hint appears within a few seconds, or "on its way" shows.
+15. Settings → Remove ads: the store sheet opens; after buying, "Ads removed"
+    shows and no interstitial plays.
+16. Settings → Delete my data → confirm: the app returns to a fresh home.
+17. With `min_supported_build` above the installed build in Remote Config, the
+    update screen blocks the app and the button opens the store.
