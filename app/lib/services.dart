@@ -5,6 +5,7 @@ import 'core/api/kit_api.dart';
 import 'core/auth/anonymous_session.dart';
 import 'core/crash/crash_reporter.dart';
 import 'core/iap/iap_service.dart';
+import 'core/remote/remote_flags.dart';
 import 'core/storage/local_store.dart';
 import 'features/review/review_prompt.dart';
 import 'features/settings/settings_controller.dart';
@@ -23,11 +24,19 @@ class Services {
     required this.ads,
     required this.iap,
     required this.review,
+    required this.flags,
+    required this.buildNumber,
+    required this.packageName,
   });
 
   /// Production wiring. Each piece answers "unavailable" when its backing
   /// service is not configured, so the app boots on a fresh clone.
-  factory Services.production(LocalStore store) {
+  factory Services.production(
+    LocalStore store, {
+    required RemoteFlags flags,
+    required int buildNumber,
+    required String packageName,
+  }) {
     final session = AnonymousSession(
       auth: CrashReporter.firebaseReady ? FirebaseAuth.instance : null,
     );
@@ -47,6 +56,9 @@ class Services {
       ads: AdsService(),
       iap: iap,
       review: ReviewPrompt(store),
+      flags: flags,
+      buildNumber: buildNumber,
+      packageName: packageName,
     );
   }
 
@@ -57,6 +69,9 @@ class Services {
   final AdsService ads;
   final IapService iap;
   final ReviewPrompt review;
+  final RemoteFlags flags;
+  final int buildNumber;
+  final String packageName;
 
   /// The controller for a new or resumed game, wired to the server when
   /// there is one.

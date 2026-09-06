@@ -19,8 +19,12 @@ Future<bool> showHintOffer(
 }) async {
   final l10n = AppLocalizations.of(context);
   final api = services.api;
-  final canWatch = api != null && services.ads.isRewardedReady;
-  final pack = api == null ? null : services.iap.products[hintPack5Id];
+  final flags = services.flags;
+  final canWatch =
+      api != null && flags.adsEnabled && services.ads.isRewardedReady;
+  final pack = api == null || !flags.iapEnabled
+      ? null
+      : services.iap.products[hintPack5Id];
   final choice = await showModalBottomSheet<_Offer>(
     context: context,
     builder: (context) => SafeArea(

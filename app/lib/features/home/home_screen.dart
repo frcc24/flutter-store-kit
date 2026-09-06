@@ -38,8 +38,12 @@ class _HomeScreenState extends State<HomeScreen> {
   /// in Settings.
   Future<void> _bootServices() async {
     final services = widget.services;
-    await services.iap.init(kitProductIds);
-    if (!mounted || !services.ads.config.isConfigured) return;
+    if (services.flags.iapEnabled) await services.iap.init(kitProductIds);
+    if (!mounted ||
+        !services.flags.adsEnabled ||
+        !services.ads.config.isConfigured) {
+      return;
+    }
     var consent = services.store.loadAdsConsent();
     if (consent == null) {
       consent = await showAdsConsentDialog(context) ?? false;

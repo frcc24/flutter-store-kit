@@ -6,6 +6,7 @@ import 'package:mini_sudoku/core/ads/ads_service.dart';
 import 'package:mini_sudoku/core/api/kit_api.dart';
 import 'package:mini_sudoku/core/auth/anonymous_session.dart';
 import 'package:mini_sudoku/core/iap/iap_service.dart';
+import 'package:mini_sudoku/core/remote/remote_flags.dart';
 import 'package:mini_sudoku/core/storage/local_store.dart';
 import 'package:mini_sudoku/features/review/review_prompt.dart';
 import 'package:mini_sudoku/features/settings/settings_controller.dart';
@@ -64,6 +65,9 @@ Future<Services> testServices({
   AdsService? ads,
   IapService? iap,
   ReviewPrompt? review,
+  RemoteFlags flags = const RemoteFlags(),
+  int buildNumber = 1,
+  String packageName = 'br.com.frcc24.mini_sudoku',
 }) async {
   final s = store ?? await freshStore();
   return Services(
@@ -74,6 +78,9 @@ Future<Services> testServices({
     ads: ads ?? AdsService(config: const AdsConfig()),
     iap: iap ?? IapService(store: NoStore(), onPurchase: (_) async {}),
     review: review ?? ReviewPrompt(s, review: NoReview()),
+    flags: flags,
+    buildNumber: buildNumber,
+    packageName: packageName,
   );
 }
 

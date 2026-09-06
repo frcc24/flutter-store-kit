@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'core/remote/force_update_gate.dart';
 import 'core/theme.dart';
 import 'features/home/home_screen.dart';
 import 'l10n/app_localizations.dart';
@@ -20,7 +21,12 @@ class MiniSudokuApp extends StatelessWidget {
       locale: services.settings.locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: HomeScreen(services: services),
+      home: ForceUpdateGate(
+        flags: services.flags,
+        currentBuild: services.buildNumber,
+        packageName: services.packageName,
+        child: HomeScreen(services: services),
+      ),
     ),
   );
 }

@@ -24,6 +24,8 @@ dependencies:
   in_app_purchase: ^3.3.0
   in_app_purchase_android: ^0.5.3
   in_app_review: ^2.0.12
+  firebase_remote_config: ^6.6.0
+  package_info_plus: ^10.2.1
 
 dev_dependencies:
   flutter_test:

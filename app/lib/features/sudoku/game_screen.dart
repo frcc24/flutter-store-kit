@@ -123,7 +123,9 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       if (mounted) await showReviewDialog(context, services.review);
       return;
     }
-    if (!stats.adFree && stats.completedGames % 2 == 0) {
+    if (!stats.adFree &&
+        services.flags.adsEnabled &&
+        stats.completedGames % 2 == 0) {
       await services.ads.showInterstitial();
     }
   }

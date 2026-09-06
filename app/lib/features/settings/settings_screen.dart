@@ -93,7 +93,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   setState(() {});
                 },
               ),
-            if (services.iap.available) ...[
+            if (services.flags.iapEnabled && services.iap.available) ...[
               const SizedBox(height: 24),
               Text(
                 l10n.purchases,
