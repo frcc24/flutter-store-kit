@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/storage/local_store.dart';
 import '../../l10n/app_localizations.dart';
+import '../privacy/privacy_policy_screen.dart';
 import '../rules/rules_screen.dart';
 import '../settings/settings_controller.dart';
 import '../settings/settings_screen.dart';
@@ -120,6 +121,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () =>
                       _push(SettingsScreen(settings: widget.settings)),
                   child: Text(l10n.settings),
+                ),
+                const SizedBox(height: 12),
+                TextButton(
+                  onPressed: () => _push(const PrivacyPolicyScreen()),
+                  child: Text(l10n.privacyPolicy),
                 ),
               ],
             ),
