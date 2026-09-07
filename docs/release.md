@@ -20,7 +20,11 @@ updated by the store build later.
    ```
 
 2. Copy `android/key.properties.example` to `android/key.properties` and fill
-   in the passwords. `storeFile` is relative to `android/app/`.
+   in the passwords. `storeFile` is relative to `android/app/`, or absolute. On
+Windows an absolute path is `C:/Users/you/keys/upload.jks` — with the drive
+letter and forward slashes. A Git Bash style path (`/c/Users/...`) is not
+absolute to Gradle: it resolves it against `android/app/` and fails with
+`Keystore file ... not found for signing config`.
 3. Check both files are ignored: `git check-ignore android/key.properties
    android/app/upload-keystore.jks` prints both paths.
 
