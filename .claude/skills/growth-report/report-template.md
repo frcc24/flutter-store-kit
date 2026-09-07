@@ -30,7 +30,7 @@ Versions live this week: <versionName+code>. Timezones: Play = America/Los_Angel
 | Install → first game | | | |
 | Completion | | | |
 | Paid hints per game | watch | | |
-| Ad reward yield | | | |
+| Rewarded ads per paid hint | | | |
 | Installs trend | | | |
 | Uninstalls | | | |
 | Retention | | | |

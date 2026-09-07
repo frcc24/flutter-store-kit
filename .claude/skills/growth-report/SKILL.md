@@ -26,6 +26,13 @@ verdict per number is a table; this one decides.
 2. Apply the rules, one verdict per row:
    - **Crash-free users** ≥ 99% → ok; 97–99% → watch (read the top crash);
      < 97% → act (hotfix or `min_supported_build` to retire the build).
+     These two numbers are this kit's choice, deliberately stricter than the
+     store's. Google publishes no crash-free threshold: its bad-behavior bar is
+     **1.09% of daily active users with a user-perceived crash** across all
+     devices, or **8% on a single model**
+     (developer.android.com/topic/performance/vitals/crash, read 2026-09-07),
+     read in Play Console → App quality → Android vitals. Say which ruler the
+     report used.
    - **Install → first game** = users with `game_started` ÷ `first_open`
      users. ≥ 0.5 → ok; below → act: the app breaks before the board (check
      Crashlytics on that build) or the consent dialog blocks.
@@ -35,9 +42,15 @@ verdict per number is a table; this one decides.
    - **Paid hints per completed game** = `hint_used{paid}` ÷
      `game_completed`. No threshold: a trend to watch. A jump after a
      release means the puzzle got harder or the free hint broke.
-   - **Ad reward yield** = `ad_rewarded` ÷ `hint_used{paid}`. Below 0.5 →
-     watch: rewarded ads are not filling (Unity dashboard fill rate) or the
-     S2S callback is failing (`wrangler tail`).
+   - **Rewarded ads per paid hint** = `ad_rewarded` ÷ `hint_used{paid}`. Below
+     0.5, or a sudden drop → watch. This ratio mixes two sources on purpose:
+     the app only knows the hint was paid, not where the balance came from, so
+     the denominator counts hints funded by ads **and** by purchased packs. A
+     drop is either ads not filling (Unity dashboard fill rate, and the S2S
+     callback in `wrangler tail`) or players buying packs instead, which is
+     good news wearing the same face. The ledger separates them: `source` is
+     `unity_ads` or `google_play`. Do not call this ad yield — yield is money
+     per impression, and it lives in the Unity dashboard.
    - **Installs, 7d vs prior 7d**: drop > 40% → act (campaign paused,
      listing changed, or a store policy warning); rise > 100% with flat
      `game_started` → watch (low-quality traffic).
