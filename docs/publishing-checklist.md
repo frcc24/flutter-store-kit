@@ -1,10 +1,30 @@
 # Publishing checklist — Google Play
 
-One page. Every line is something the review, the policy or a real upload
-has refused once. Tick it before **every** production release; the first
-time, tick it before the internal test too.
+Every line is something the review, the policy or a real upload has refused
+once. Tick it before **every** production release; the first time, tick it
+before the internal test too.
 
-## Account and app record (once)
+## The short version
+
+1. Account verified and the app registered under its final package name, the
+   upload key backed up in two places.
+2. Privacy policy and deletion page public, reachable, describing the app that
+   exists.
+3. Content declarations answered: data safety, ads, rating, target audience,
+   account deletion.
+4. Build: version bumped, suites green, bundle signed with your key, tested on
+   a phone with the store build.
+5. Listing: text within the limits, images, an e-mail you read, release notes
+   in the three languages.
+6. After upload: internal, closed if required, staged production rollout, with
+   Remote Config ready to switch things off.
+
+The first three are **once per app**. The last three are **every release**.
+The two sections below open each of them.
+
+## Once per app
+
+### Account and app record
 
 - [ ] Developer account verified (identity, and the phone/e-mail checks).
 - [ ] **Personal account created after November 2023:** a closed test with
@@ -15,7 +35,7 @@ time, tick it before the internal test too.
 - [ ] Play App Signing enabled (default). Upload keystore backed up in two
       places with its passwords (`docs/release.md`).
 
-## Policy pages
+### Policy pages
 
 - [ ] Privacy policy URL on the listing: public, reachable without login,
       same host as the deletion page. The kit's is
@@ -28,7 +48,7 @@ time, tick it before the internal test too.
       purchases, anonymous Firebase account, Crashlytics, Analytics. Update
       the effective date when any SDK changes.
 
-## App content declarations (Policy → App content)
+### App content declarations (Policy → App content)
 
 - [ ] **Data safety**: Collected — Device or other IDs (advertising id, for
       ads, by Unity), Purchase history (by Google Play, to credit purchases),
@@ -46,7 +66,9 @@ time, tick it before the internal test too.
 - [ ] **Account deletion**: Yes, the app lets users create an account
       (anonymous counts) and provides in-app and web deletion.
 
-## Build
+## Every release
+
+### Build
 
 - [ ] `version` bumped in `app/pubspec.yaml`; `versionCode` higher than any
       track's last upload.
@@ -63,7 +85,7 @@ time, tick it before the internal test too.
       project (the release build's Google services differ from the debug
       one).
 
-## Listing
+### Listing
 
 - [ ] `docs/store-listing.md` pasted: en-US default, pt-BR and es-419
       translations; title ≤ 30, short description ≤ 80, full ≤ 4000 chars.
@@ -73,7 +95,7 @@ time, tick it before the internal test too.
       arrive there.
 - [ ] Release notes in the three languages.
 
-## After upload
+### After upload
 
 - [ ] Internal test → closed test (14 days if required) → production with a
       staged rollout (10% → 50% → 100%), watching crash-free users and the

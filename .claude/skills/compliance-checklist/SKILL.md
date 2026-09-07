@@ -10,7 +10,8 @@ Before the first upload, whenever an SDK is added or removed, and whenever
 the Play Console flags a policy issue.
 
 ## Inputs
-- `docs/publishing-checklist.md` (this repo) — the one page to tick.
+- `docs/publishing-checklist.md` (this repo) — the short version first, then
+  once-per-app and every-release.
 - The list of SDKs in `app/pubspec.yaml` (ads, billing, firebase_*).
 - The two hosted pages: `docs/privacy-policy.md`, `docs/delete-account.md`.
 

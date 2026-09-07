@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- `docs/publishing-checklist.md` opens with a six-line short version and splits
+  into "once per app" and "every release", so the page you print is the summary
+  and the detail sits under it.
+
 ## [0.3.1] - 2026-09-07
 
 ### Fixed
