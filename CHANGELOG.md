@@ -6,6 +6,20 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-09-07
+
+### Fixed
+
+- The review prompt no longer asks the player a question before the Play
+  review card. The in-app review policy forbids any question before or while
+  the card is shown, including "are you enjoying it?", and forbids a button
+  that triggers the API. `ReviewPrompt` now exposes `willAsk` and `maybeAsk`;
+  `review_dialog.dart` and its four strings are gone.
+
+### Changed
+
+- `version` bumped to `0.3.1+4`.
+
 ## [0.3.0] - 2026-09-06
 
 ### Added

@@ -5,7 +5,6 @@ import '../../core/time_format.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services.dart';
 import '../hints/hint_offer_sheet.dart';
-import '../review/review_dialog.dart';
 import 'board_widget.dart';
 import 'difficulty_label.dart';
 import 'game_controller.dart';
@@ -114,13 +113,14 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     }
   }
 
-  /// Review first, ad second, never both on the same game. The review asks
-  /// for a favour; an ad right before it is the wrong mood.
+  /// Review card first, ad second, never both on the same game. An ad right
+  /// before the card is the wrong mood, and the policy forbids asking the
+  /// player anything of our own either way.
   Future<void> _afterGame() async {
     final services = widget.services;
     final stats = widget.controller.stats;
-    if (await services.review.shouldPrompt(stats.completedGames)) {
-      if (mounted) await showReviewDialog(context, services.review);
+    if (services.review.willAsk(stats.completedGames)) {
+      await services.review.maybeAsk(stats.completedGames);
       return;
     }
     if (!stats.adFree &&

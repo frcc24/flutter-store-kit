@@ -71,10 +71,6 @@
     }
   },
   "purchasePending": "Purchase pending…",
-  "reviewTitle": "Enjoying Mini Sudoku?",
-  "reviewBody": "A rating takes ten seconds and helps other people find the game.",
-  "reviewLater": "Not now",
-  "reviewNow": "Rate it",
   "deleteData": "Delete my data",
   "deleteDataBody": "This erases your progress, statistics and hint balance on this device and on our server, and cannot be undone. Purchases stay with your Google account and can be restored.",
   "deleteDataConfirm": "Delete everything",

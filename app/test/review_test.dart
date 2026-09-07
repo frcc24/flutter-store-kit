@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -37,30 +39,46 @@ class CountingAds extends AdsService {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test(
-    'prompts at 3, then every 5, stops after accept or three refusals',
-    () async {
-      final store = await freshStore();
-      final review = FakeReview();
-      final prompt = ReviewPrompt(store, review: review);
-      expect(await prompt.shouldPrompt(1), isFalse);
-      expect(await prompt.shouldPrompt(3), isTrue);
-      expect(await prompt.shouldPrompt(3), isFalse, reason: 'once per count');
-      await prompt.decline();
-      expect(await prompt.shouldPrompt(4), isFalse);
-      expect(await prompt.shouldPrompt(8), isTrue);
-      await prompt.decline();
-      expect(await prompt.shouldPrompt(13), isTrue);
-      await prompt.decline();
-      expect(await prompt.shouldPrompt(18), isFalse, reason: 'three refusals');
+  test('asks at 3, then every 5, at most three times', () async {
+    final store = await freshStore();
+    final review = FakeReview();
+    final prompt = ReviewPrompt(store, review: review);
+    final asked = <int>[];
+    for (var game = 1; game <= 25; game++) {
+      final before = review.requested;
+      await prompt.maybeAsk(game);
+      if (review.requested > before) asked.add(game);
+    }
+    expect(asked, [3, 8, 13]);
+  });
 
-      final fresh = ReviewPrompt(await freshStore(), review: review);
-      expect(await fresh.shouldPrompt(3), isTrue);
-      await fresh.accept();
-      expect(review.requested, 1);
-      expect(await fresh.shouldPrompt(8), isFalse);
-    },
-  );
+  test('the same completed count never asks twice', () async {
+    final store = await freshStore();
+    final review = FakeReview();
+    final prompt = ReviewPrompt(store, review: review);
+    await prompt.maybeAsk(3);
+    await prompt.maybeAsk(3);
+    expect(review.requested, 1);
+  });
+
+  test('willAsk answers without asking', () async {
+    final store = await freshStore();
+    final review = FakeReview();
+    final prompt = ReviewPrompt(store, review: review);
+    expect(prompt.willAsk(2), isFalse);
+    expect(prompt.willAsk(3), isTrue);
+    expect(review.requested, 0, reason: 'willAsk has no side effect');
+  });
+
+  test('the kit ships no dialog of its own for the review flow', () {
+    // The Play in-app review policy forbids asking the user anything before or
+    // while the rating card is shown, including "are you enjoying it?".
+    // https://developer.android.com/guide/playcore/in-app-review
+    expect(
+      File('lib/features/review/review_dialog.dart').existsSync(),
+      isFalse,
+    );
+  });
 
   Future<void> finishGame(
     WidgetTester tester,
@@ -83,7 +101,7 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  Future<(CountingAds, GameController)> game(
+  Future<(CountingAds, FakeReview, GameController)> game(
     WidgetTester tester, {
     required int completedBefore,
     bool adFree = false,
@@ -93,10 +111,11 @@ void main() {
       PlayerStats(completedGames: completedBefore, adFree: adFree),
     );
     final ads = CountingAds();
+    final review = FakeReview();
     final services = await testServices(
       store: store,
       ads: ads,
-      review: ReviewPrompt(store, review: FakeReview()),
+      review: ReviewPrompt(store, review: review),
     );
     final controller = GameController(store: store)
       ..startNew(Difficulty.easy, seed: 7);
@@ -109,42 +128,42 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    return (ads, controller);
+    return (ads, review, controller);
   }
 
+  testWidgets('the second completed game shows an interstitial', (
+    tester,
+  ) async {
+    final (ads, review, controller) = await game(tester, completedBefore: 1);
+    await finishGame(tester, controller);
+    expect(find.text('Puzzle solved!'), findsOneWidget);
+    await tester.tap(find.text('Home'));
+    await tester.pumpAndSettle();
+    expect(ads.interstitials, 1);
+    expect(review.requested, 0);
+  });
+
   testWidgets(
-    'the second completed game shows an interstitial after the dialog',
+    'the third completed game asks for a review, with no question and no '
+    'interstitial',
     (tester) async {
-      final (ads, controller) = await game(tester, completedBefore: 1);
+      final (ads, review, controller) = await game(tester, completedBefore: 2);
       await finishGame(tester, controller);
-      expect(find.text('Puzzle solved!'), findsOneWidget);
-      await tester.tap(find.text('Home'));
+      await tester.tap(find.text('Play again'));
       await tester.pumpAndSettle();
-      expect(ads.interstitials, 1);
+      expect(review.requested, 1);
+      expect(ads.interstitials, 0);
+      expect(
+        find.textContaining('Enjoying'),
+        findsNothing,
+        reason: 'the policy forbids a question before the card',
+      );
+      await controller.pause();
     },
   );
 
-  testWidgets('the third completed game asks for a review instead', (
-    tester,
-  ) async {
-    final (ads, controller) = await game(tester, completedBefore: 2);
-    await finishGame(tester, controller);
-    await tester.tap(find.text('Play again'));
-    await tester.pumpAndSettle();
-    expect(find.text('Enjoying Mini Sudoku?'), findsOneWidget);
-    await tester.tap(find.text('Not now'));
-    await tester.pumpAndSettle();
-    expect(ads.interstitials, 0);
-    expect(
-      controller.session!.isCompleted,
-      isFalse,
-      reason: 'play again started a new game',
-    );
-    await controller.pause();
-  });
-
   testWidgets('no interstitial after the purchase', (tester) async {
-    final (ads, controller) = await game(
+    final (ads, _, controller) = await game(
       tester,
       completedBefore: 1,
       adFree: true,
