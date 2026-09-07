@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- `docs/errata.md`: where the book's corrections live (issues labelled
+  `errata`), how to report one, and the update policy.
+
 ### Changed
 
 - `docs/publishing-checklist.md` opens with a six-line short version and splits

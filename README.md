@@ -79,6 +79,8 @@ Each `cap-NN` tag is the repository as it stands at the end of that chapter
 of the book *Zero to Store with AI* (PT: *Do Zero à Loja com IA*), which walks
 through building, monetizing and shipping this app with Claude Code.
 
+Corrections to the book: [docs/errata.md](docs/errata.md).
+
 ## Português
 
 Este repositório acompanha o livro *Do Zero à Loja com IA*. Cada tag `cap-NN`
