@@ -6,6 +6,21 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-09-06
+
+### Added
+
+- Seven Claude Code skills in `.claude/skills/` and a plugin manifest;
+  `tool/check_skills.mjs` validates them in CI.
+- `docs/publishing-checklist.md`, `docs/store-listing.md` (en-US, pt-BR,
+  es-419), `docs/store-image-prompts.md`.
+- Analytics events `game_started`, `hint_used`, `ad_rewarded`,
+  `purchase_delivered`.
+
+### Changed
+
+- `version` bumped to `0.3.0+3`.
+
 ## [0.2.0] - 2026-09-06
 
 ### Added

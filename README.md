@@ -1,5 +1,7 @@
 # flutter-store-kit
 
+![CI](https://github.com/frcc24/flutter-store-kit/actions/workflows/ci.yaml/badge.svg)
+
 A small Flutter game — **Mini Sudoku** — that ships with everything a store
 listing needs, so you can replace the game and keep the rest:
 
@@ -23,7 +25,7 @@ Every online piece degrades to "unavailable" when it is not configured, so a
 fresh clone builds, runs and passes its tests with no Firebase project, no
 Worker and no Unity account.
 
-Coming in the next tags: Claude Code skills and the publishing checklist.
+The publishing checklist is `docs/publishing-checklist.md`.
 
 Tested with **Flutter 3.44.2 / Dart 3.12.2**. MIT license.
 
@@ -53,6 +55,23 @@ flutter run
 8. Regenerate the icon: put your 1024×1024 PNG at `app/assets/icon/icon.png`
    and run `dart run flutter_launcher_icons` inside `app/`.
 9. Follow `docs/release.md` to sign and upload.
+
+## Claude Code skills
+
+Open this repository in Claude Code and the skills in `.claude/skills/` are
+picked up automatically (or run `claude --plugin-dir .` from anywhere):
+
+| Skill | What it walks you through |
+|---|---|
+| `flutter-l10n` | adding copy in EN/PT/ES the kit way |
+| `store-release` | signing, versionCode, upload, the 14-day closed test |
+| `unity-ads` | Game IDs, consent, test mode, the S2S callback and its proof |
+| `iap-server-verify` | Play products, service account, secrets, the redeem flow |
+| `compliance-checklist` | policy URLs, Data safety answers, declarations |
+| `store-listing-aso` | listing texts within limits, assets, experiments |
+| `growth-report` | weekly numbers with a verdict and an action each |
+
+`node tool/check_skills.mjs` validates them; CI runs it.
 
 ## Tags
 
