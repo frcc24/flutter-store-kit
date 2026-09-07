@@ -47,7 +47,7 @@ Mini Sudoku
 
 **Descrição breve** (≤ 80)
 ```
-Sudoku 9×9 limpo. Três níveis, uma dica grátis por partida, sem enrolação.
+Sudoku 9×9 limpo. Três níveis, dica grátis por partida, sem enrolação.
 ```
 
 **Descrição completa**
