@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/ads/ads_service.dart';
+import '../../core/analytics/app_analytics.dart';
 import '../../core/iap/products.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services.dart';
@@ -84,6 +85,7 @@ Future<bool> _watchAd(
   if (api == null || uid == null) return false;
   final outcome = await services.ads.showRewarded(serverId: uid);
   if (outcome != RewardedOutcome.finished) return false;
+  AppAnalytics.logAdRewarded();
   for (var attempt = 0; attempt < 4; attempt++) {
     await Future<void>.delayed(const Duration(milliseconds: 800));
     final hints = await api.wallet();

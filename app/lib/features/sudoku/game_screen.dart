@@ -132,10 +132,12 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
 
   Future<void> _hint() async {
     final controller = widget.controller;
+    final wasFree = controller.hasFreeHint;
     final result = await controller.useHint();
     if (!mounted) return;
     switch (result) {
       case HintResult.applied:
+        AppAnalytics.logHintUsed(source: wasFree ? 'free' : 'paid');
       case HintResult.nothingToReveal:
         return;
       case HintResult.unavailable:

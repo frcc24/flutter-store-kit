@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
+import '../../core/analytics/app_analytics.dart';
 import '../../core/api/kit_api.dart';
 import '../../core/iap/products.dart';
 import '../../core/storage/local_store.dart';
@@ -28,6 +29,7 @@ class PurchaseDeliveries {
       case removeAdsId:
         await store.saveStats(store.loadStats().copyWith(adFree: true));
         await finish(purchase, consumable: false);
+        AppAnalytics.logPurchaseDelivered(productId: purchase.productID);
       case hintPack5Id:
         final api = this.api;
         // No server: nothing can verify the receipt. Left open on purpose;
@@ -42,6 +44,7 @@ class PurchaseDeliveries {
               store.loadStats().copyWith(hintBalance: hints),
             );
             await finish(purchase, consumable: true);
+            AppAnalytics.logPurchaseDelivered(productId: purchase.productID);
           case RedeemRetryLater():
             return;
           case RedeemRefusedResult(:final code):

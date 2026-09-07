@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/ads/ads_consent_dialog.dart';
+import '../../core/analytics/app_analytics.dart';
 import '../../core/iap/products.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services.dart';
@@ -91,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     if (difficulty == null || !mounted) return;
+    AppAnalytics.logGameStarted(difficulty: difficulty.name);
     await _open(widget.services.newGameController()..startNew(difficulty));
   }
 
