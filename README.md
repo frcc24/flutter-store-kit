@@ -86,6 +86,18 @@ through building, monetizing and shipping this app with Claude Code.
 
 Corrections to the book: [docs/errata.md](docs/errata.md).
 
+## The book
+
+This kit is the code of *Zero to Store with AI* — the sequence, the prompts, the
+checks and the traps that produced it. 17 chapters, 4 appendices, 36 prompts, in
+English and Portuguese.
+
+- English: [Gumroad](https://fractal188.gumroad.com/l/zero-to-store-with-ai) · Amazon Kindle (in review)
+- Português: [Hotmart](https://hotmart.com/pt-br/marketplace/produtos/do-zero-a-loja-com-ia-construa-monetize-e-publique-seu-app-flutter-com-claude-code/H107504256U) · Amazon Kindle (in review)
+
+Free sample, PDF and EPUB, both editions, no sign-up:
+[releases/book-sample-v1](https://github.com/frcc24/flutter-store-kit/releases/tag/book-sample-v1).
+
 ## Português
 
 Este repositório acompanha o livro *Do Zero à Loja com IA*. Cada tag `cap-NN`
