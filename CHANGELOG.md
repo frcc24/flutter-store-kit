@@ -10,6 +10,14 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- The generator could ship a puzzle with two solutions. `_countSolutions`
+  aborted at its node limit and returned the solutions found so far, so a
+  search that ran out of budget with one solution was read as "unique" and the
+  cell removal was kept. It now reports whether the search finished, and only a
+  finished search with exactly one solution keeps a removal. `tool/check_unique.dart`
+  proves it over 90 puzzles with an independent solver; before the fix, 13 of
+  those 90 had two solutions.
+
 - The review prompt no longer asks the player a question before the Play
   review card. The in-app review policy forbids any question before or while
   the card is shown, including "are you enjoying it?", and forbids a button

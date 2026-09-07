@@ -47,10 +47,9 @@ class SudokuEngine {
     _shuffle(cells, rng);
     var holes = 0;
     var stalledRounds = 0;
-    // ponytail: dig until the target or three rounds without progress. The
-    // node limit in _countSolutions means a hard puzzle can end a few holes
-    // short of the target; it never ships a cell whose removal was not proven
-    // unique within the limit.
+    // ponytail: dig until the target or three rounds without progress. A hard
+    // puzzle can end a few holes short of the target, because a removal is
+    // kept only when the search FINISHED and found exactly one solution.
     while (holes < target && stalledRounds < 3) {
       var removed = 0;
       for (final (r, c) in cells) {
@@ -58,7 +57,12 @@ class SudokuEngine {
         if (givens[r][c] == 0) continue;
         final backup = givens[r][c];
         givens[r][c] = 0;
-        if (_countSolutions(givens, rng, limit: 2, nodeLimit: 30000) == 1) {
+        // A search that ran out of nodes proves nothing: it may simply not
+        // have reached the second solution. Reading that as "unique" is how a
+        // puzzle with two answers ships, and it is the worst bug this game
+        // can have.
+        final count = _countSolutions(givens, rng, limit: 2, nodeLimit: 200000);
+        if (count.complete && count.solutions == 1) {
           holes++;
           removed++;
         } else {
@@ -133,7 +137,10 @@ class SudokuEngine {
     ];
   }
 
-  int _countSolutions(
+  /// Counts up to [limit] solutions of [grid]. `complete` is false when the
+  /// search hit [nodeLimit] and stopped early: the count is then a lower
+  /// bound, and one solution does NOT mean the puzzle is unique.
+  ({int solutions, bool complete}) _countSolutions(
     List<List<int>> grid,
     _StableRandom rng, {
     required int limit,
@@ -141,9 +148,14 @@ class SudokuEngine {
   }) {
     var solutions = 0;
     var visited = 0;
+    var exhausted = false;
 
     bool solve() {
-      if (solutions >= limit || visited > nodeLimit) return false;
+      if (solutions >= limit) return false;
+      if (visited > nodeLimit) {
+        exhausted = true;
+        return false;
+      }
       (int, int)? empty;
       search:
       for (var r = 0; r < size; r++) {
@@ -173,7 +185,7 @@ class SudokuEngine {
     }
 
     solve();
-    return solutions;
+    return (solutions: solutions, complete: !exhausted);
   }
 }
 
