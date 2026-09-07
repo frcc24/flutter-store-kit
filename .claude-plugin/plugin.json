@@ -1,0 +1,10 @@
+{
+  "name": "flutter-store-kit",
+  "version": "0.3.0",
+  "description": "Skills for shipping a Flutter app to the stores with the flutter-store-kit: localization, release signing, Unity Ads, server-verified purchases, compliance, store listing, growth report.",
+  "author": {
+    "name": "frcc24",
+    "url": "https://github.com/frcc24"
+  },
+  "skills": "./.claude/skills/"
+}

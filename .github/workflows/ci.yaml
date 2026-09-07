@@ -83,3 +83,15 @@ jobs:
       # Runs inside workerd with a local D1; no Cloudflare account involved.
       - name: Test
         run: npm test
+
+  skills:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate Claude Code skills and plugin manifest
+        run: node tool/check_skills.mjs
