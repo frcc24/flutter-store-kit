@@ -31,7 +31,7 @@ WHAT YOU GET
 • English, Portuguese and Spanish.
 
 WHAT WE DO NOT DO
-• No account, no e-mail, no password.
+• No sign-up, no e-mail, no password.
 • No timers that nag, no lives, no energy.
 • Ads can be removed with a single purchase. Rewarded ads stay optional.
 
@@ -65,7 +65,7 @@ O QUE VOCÊ TEM
 • Português, inglês e espanhol.
 
 O QUE A GENTE NÃO FAZ
-• Sem conta, sem e-mail, sem senha.
+• Sem cadastro, sem e-mail, sem senha.
 • Sem cronômetro que cobra, sem vidas, sem energia.
 • Os anúncios saem com uma única compra. Os recompensados continuam
   opcionais.
@@ -100,7 +100,7 @@ LO QUE TIENES
 • Español, inglés y portugués.
 
 LO QUE NO HACEMOS
-• Sin cuenta, sin correo, sin contraseña.
+• Sin registro, sin correo, sin contraseña.
 • Sin cronómetros que presionan, sin vidas, sin energía.
 • Los anuncios se quitan con una sola compra. Los de recompensa siguen
   siendo opcionales.
