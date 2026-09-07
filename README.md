@@ -2,6 +2,11 @@
 
 ![CI](https://github.com/frcc24/flutter-store-kit/actions/workflows/ci.yaml/badge.svg)
 
+> This repository is the companion code of the book *Zero to Store with AI*
+> (PT: *Do Zero à Loja com IA*). It is MIT licensed and complete on its own —
+> the book is the sequence, the prompts, the checks and the traps that
+> produced it.
+
 A small Flutter game — **Mini Sudoku** — that ships with everything a store
 listing needs, so you can replace the game and keep the rest:
 
